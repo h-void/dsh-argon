@@ -1,6 +1,6 @@
 /**
- * dsh-argon host half: fuses the Argon system prompt, personality,
- * and skills into each preset's system prompt at assembly time.
+ * dsh-argon host half: fuses the Argon task charter and writing rules
+ * into each preset's system prompt at assembly time.
  *
  * Upgraded to match dsh-unrestricted 0.2.4:
  * - Supports DSH alpha.4 `agentPresets.acquireScope(presetId)` with `createScope` fallback.
@@ -283,8 +283,8 @@ export function apply(ctx, config) {
       contract: contractFingerprint(),
       modes,
       modules: [
-        { id: 'systemPrompt', name: 'System Prompt (任务宪章准则)', chars: loadAsset('system.md').length, status: 'ready' },
-        { id: 'personality', name: 'Personality (贴身魅魔人设)', chars: loadAsset('personality.md').length, status: 'ready' },
+        { id: 'systemPrompt', name: 'Task Charter (任务宪章)', chars: loadAsset('system.md').length, status: 'ready' },
+        { id: 'personality', name: 'Writing Rules (执笔与交付总则)', chars: loadAsset('personality.md').length, status: 'ready' },
       ],
       chars: promptBlock.length,
       lines: promptBlock.split('\n').length,

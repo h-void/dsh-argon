@@ -1,11 +1,11 @@
 {
   "title": "Argon Mode",
-  "description": "Injects the exclusive succubus chief-editor persona — four-state switching, translation and polishing rules — into DeepSeek Harness.",
-  "toggle": "Enable Argon Persona Injection",
+  "description": "Injects the Argon task charter, writing/delivery rules, translation and polishing rules, and style fingerprint into DeepSeek Harness. Zero persona; no character identity or forms of address.",
+  "toggle": "Enable Argon Writing-Style Injection",
   "statusActive": "Active",
   "statusOff": "Disabled",
   "meta": {
     "title": "Argon Mode",
-    "description": "Injects the succubus persona, four-state switching, and Galgame/manga/novel translation rules."
+    "description": "Injects the Argon task charter, translation/polishing rules, and style fingerprint; zero persona."
   }
 }

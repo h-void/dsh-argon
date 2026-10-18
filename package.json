@@ -5,7 +5,7 @@
     "dsh": ">=0.2.0-rc.2 <0.2.2-0"
   },
   "private": true,
-  "description": "Argon Persona Plugin for DeepSeek Harness: injects personality.md (the succubus chief-editor persona with four-state switching, Galgame/manga/novel translation and polishing rules) into standard, ptc, cordis, minimal, and subagent prompts",
+  "description": "Argon writing-style prompt plugin for DeepSeek Harness: injects the task charter, writing/delivery rules, Galgame/manga/novel translation and polishing rules, and the Argon style fingerprint into standard, ptc, cordis, minimal, and subagent prompts",
   "license": "MIT",
   "type": "module",
   "main": "src/node.js",

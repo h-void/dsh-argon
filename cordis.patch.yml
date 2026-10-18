@@ -5,7 +5,7 @@
   config:
     trustedHosts: !!js ctx.webStartup.trustedHosts
 
-# dsh-argon 提示词与技能注入插件
+# dsh-argon 文风提示词注入插件
 - insert:
     - id: argon
       name: 'dsh-argon'
