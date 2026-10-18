@@ -108,17 +108,24 @@ dsh plugin --profile web remove dsh-argon
 
 ### 本地源码安装
 
-面向二次开发调试，使用 `file:` 协议安装本地源码目录：
+面向二次开发调试。普通用户请用上面的 GitHub 安装；这一节只给改源码的人。
+
+把 `D:/path/to/dsh-argon` 换成你的实际源码目录：
 
 ```sh
 # Web 端
-dsh plugin --profile web add file:D:/ASUS/Documents/dsh-argon
+dsh plugin --profile web add file:D:/path/to/dsh-argon
 
 # 桌面端
-& "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add file:D:/ASUS/Documents/dsh-argon
+& "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add file:D:/path/to/dsh-argon
 ```
 
-本地源码安装后，插件运行时从安装目录读取 `assets/`；改 `node_modules/dsh-argon/assets/` 会热更新，改源码仓库的 `assets/` 后需重新执行 `dsh plugin --profile desktop install` 同步安装副本。`src/`、`lib/` 改动需要重启 DSH。
+插件运行时从**已安装目录**读取 `assets/`，不是从源码仓库读取：
+
+- 桌面端：`~/.dsh/profiles/desktop/node_modules/dsh-argon/assets/`
+- Web 端：`~/.dsh/profiles/web/node_modules/dsh-argon/assets/`
+
+直接改这里的 `system.md` / `personality.md` 会热更新，下一次组装提示词生效。改源码仓库的 `assets/` 后，需要重新执行 `dsh plugin --profile desktop install` 同步安装副本；`src/`、`lib/` 改动需要重启 DSH。
 
 ---
 
