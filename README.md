@@ -63,4 +63,7 @@ INSERT-ONLY：只在 persona 之后（或 `dsh-unrestricted` 的 `unrestricted:e
 
 - 本插件改编自 [yexi-by/dsh-unrestricted](https://github.com/yexi-by/dsh-unrestricted)，原项目 MIT License，Copyright (c) 2026 yexi-by。
 - 插件架构、提示词融合逻辑与客户端控制器保留原项目许可；Argon 相关修改 Copyright (c) 2026 h-void。
+- 本项目采用 MIT License 开源。
+- 感谢 [yexi-by/dsh-unrestricted](https://github.com/yexi-by/dsh-unrestricted) 与 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 提供的架构、提示词锚点与运行环境。
+- 本项目与上述项目及其作者无官方隶属关系。
 - 完整许可见 [LICENSE](LICENSE)，第三方声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
