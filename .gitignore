@@ -1,4 +1,7 @@
 node_modules/
 *.log
+*.tgz
+.pnpm-store/
+coverage/
 .DS_Store
 Thumbs.db

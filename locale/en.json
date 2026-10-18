@@ -1,11 +1,6 @@
 {
-  "title": "Argon Mode",
-  "description": "Injects the Argon task charter, writing/delivery rules, translation and polishing rules, and style fingerprint into DeepSeek Harness. Zero persona; no character identity or forms of address.",
-  "toggle": "Enable Argon Writing-Style Injection",
-  "statusActive": "Active",
-  "statusOff": "Disabled",
   "meta": {
     "title": "Argon Mode",
-    "description": "Injects the Argon task charter, translation/polishing rules, and style fingerprint; zero persona."
+    "description": "Injects the Argon task charter, writing/delivery rules, translation and polishing rules, and style fingerprint; no role-play persona, only the lead-writer role."
   }
 }

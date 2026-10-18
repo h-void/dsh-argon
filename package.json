@@ -1,12 +1,18 @@
 {
   "name": "dsh-argon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "dsh": ">=0.2.0-rc.2 <0.2.2-0"
   },
   "private": true,
   "description": "Argon writing-style prompt plugin for DeepSeek Harness: injects the task charter, writing/delivery rules, Galgame/manga/novel translation and polishing rules, and the Argon style fingerprint into standard, ptc, cordis, minimal, and subagent prompts",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/h-void/dsh-argon.git"
+  },
+  "homepage": "https://github.com/h-void/dsh-argon#readme",
+  "bugs": "https://github.com/h-void/dsh-argon/issues",
   "type": "module",
   "main": "src/node.js",
   "exports": {
@@ -42,6 +48,7 @@
     }
   },
   "scripts": {
-    "test": "node --test"
+    "check": "node --check src/node.js && node --check src/rules.js && node --check lib/client.js",
+    "test": "node --test --test-isolation=none"
   }
 }

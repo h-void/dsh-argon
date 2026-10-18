@@ -13,6 +13,12 @@
  * (or behind dsh-unrestricted's `unrestricted:execution-mode` when present),
  * and never mutates any other section's text.
  *
+ * Minimal is the one exception: the registry restores the complete persona after
+ * the waterfall, so Argon rebuilds `deployment:persona-prefix` at agent scope.
+ * That shadow hardcodes the official minimal persona and structured-output
+ * instruction, so `minimalAnchorIssues()` verifies both before the shadow is
+ * registered; a mismatch keeps the stock prompt instead of overwriting it.
+ *
  * @module dsh-argon/rules
  */
 import { createHash } from 'node:crypto'
@@ -87,6 +93,26 @@ export function fusedMinimalPrompt(structuredText = '') {
   const trimmed = structuredText.trim()
   if (trimmed === '') return base
   return base + '\n\n' + trimmed
+}
+
+/**
+ * Verify the anchors that the minimal complete-persona shadow hardcodes.
+ * Standard/PTC/Cordis stay INSERT-ONLY and need no anchor check; minimal
+ * replaces the official persona, so a DSH drift must keep the stock prompt.
+ * @param sections - assembled sections of the minimal preset.
+ * @returns issue strings; empty when the hardcoded persona and structured text still match.
+ */
+export function minimalAnchorIssues(sections) {
+  const issues = []
+  const persona = sections.find(section => section.name === 'deployment:persona-prefix')
+  if (persona === undefined || persona.text !== ANCHORS.personaMinimal) {
+    issues.push('preset persona changed')
+  }
+  const structured = sections.find(section => section.name === 'tool:structured_output')
+  if (structured !== undefined && structured.text.trim() !== '' && !structured.text.startsWith(ANCHORS.structuredOutputPrefix)) {
+    issues.push('structured-output instruction changed')
+  }
+  return issues
 }
 
 /**

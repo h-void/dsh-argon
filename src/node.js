@@ -30,6 +30,7 @@ import {
   contractFingerprint,
   fuseSections,
   fusedMinimalPrompt,
+  minimalAnchorIssues,
   renderPreview,
 } from './rules.js'
 
@@ -42,8 +43,8 @@ export const inject = ['settings', 'systemPrompt', 'loader']
 const RPC_CHANNEL = '/dsh-argon'
 
 export const Config = z.object({
-  enabled: z.boolean().default(true),
-}).default({ enabled: true }).volatile()
+  enabled: z.boolean().default(false),
+}).default({ enabled: false }).volatile()
 
 export { BLOCK_SECTION }
 
@@ -130,12 +131,15 @@ export function apply(ctx, config) {
         await ctx.loader.await()
         const presets = ctx.get('agentPresets')
         if (presets === undefined) {
-          state.startup.set(presetId, issues)
+          state.startup.set(presetId, presetId === 'minimal'
+            ? ['minimal preset is not available in this profile']
+            : issues)
           return
         }
         const assembly = await presetAssembly(presetId)
         const fused = fuseSections(assembly.sections, presetId)
         if (fused.issues !== undefined) issues.push(...fused.issues)
+        if (presetId === 'minimal') issues.push(...minimalAnchorIssues(assembly.sections))
       } catch (error) {
         issues.push(`preset probe failed: ${messageOf(error)}`)
       }
@@ -237,7 +241,6 @@ export function apply(ctx, config) {
       return
     }
     state.shadows.set(agent, dispose)
-    state.fusedText.set('minimal', fusedMinimalPrompt())
   }
 
   /** Synchronize minimal persona shadows across all live agents. */
@@ -278,13 +281,15 @@ export function apply(ctx, config) {
         issues,
       }
     }
+    const systemChars = loadAsset('system.md').length
+    const personalityChars = loadAsset('personality.md').length
     return {
       enabled: state.enabled,
       contract: contractFingerprint(),
       modes,
       modules: [
-        { id: 'systemPrompt', name: 'Task Charter (任务宪章)', chars: loadAsset('system.md').length, status: 'ready' },
-        { id: 'personality', name: 'Writing Rules (执笔与交付总则)', chars: loadAsset('personality.md').length, status: 'ready' },
+        { id: 'systemPrompt', name: 'Task Charter (任务宪章)', chars: systemChars, status: systemChars > 0 ? 'ready' : 'missing' },
+        { id: 'personality', name: 'Writing Rules (执笔与交付总则)', chars: personalityChars, status: personalityChars > 0 ? 'ready' : 'missing' },
       ],
       chars: promptBlock.length,
       lines: promptBlock.split('\n').length,
@@ -339,15 +344,38 @@ export function apply(ctx, config) {
     if (!PRESETS.includes(presetId)) {
       return { presetId, contract, available: false, reason: `unknown preset "${presetId}"` }
     }
+    await ensureCheck(presetId)
+    if (!usable(presetId)) {
+      return { presetId, contract, available: false, reason: modeIssues(presetId).join('; ') || 'preset check failed' }
+    }
+    if (presetId === 'minimal') {
+      if (ctx.get('agentPresets') === undefined) {
+        return { presetId, contract, available: false, reason: 'minimal preset is not available in this profile' }
+      }
+      if (state.fusedMinimal === null) {
+        return { presetId, contract, available: false, reason: 'minimal anchor check failed' }
+      }
+      try {
+        const assembly = await presetAssembly('minimal')
+        const block = fusedMinimalPrompt()
+        const hasPersona = assembly.sections.some(section => section.name === 'deployment:persona-prefix')
+        const sections = hasPersona
+          ? assembly.sections.map(section => section.name === 'deployment:persona-prefix' ? { ...section, text: block } : section)
+          : [{ name: 'deployment:persona-prefix', text: block }, ...assembly.sections]
+        const variables = { ...assembly.variables, ...previewVariables() }
+        const text = renderPreview({ ...assembly, sections, variables }, renderPrompt)
+        return { presetId, contract, available: true, source: 'standing', ...summarize(text) }
+      } catch (error) {
+        return { presetId, contract, available: false, reason: `preview probe failed: ${messageOf(error)}` }
+      }
+    }
     const cached = state.fusedText.get(presetId)
     if (cached !== undefined) {
       return { presetId, contract, available: true, source: 'live', ...summarize(cached) }
     }
     try {
       const assembly = await presetAssembly(presetId)
-      const fused = presetId === 'minimal'
-        ? { sections: [{ name: 'deployment:persona-prefix', text: fusedMinimalPrompt() }] }
-        : fuseSections(assembly.sections, presetId)
+      const fused = fuseSections(assembly.sections, presetId)
       if (fused.issues !== undefined) {
         return { presetId, contract, available: false, reason: fused.issues.join('; ') }
       }
@@ -396,7 +424,6 @@ export function apply(ctx, config) {
     }
     if (presetId === 'minimal') {
       if (state.shadows.has(agent) && state.fusedMinimal !== null) {
-        state.fusedText.set('minimal', fusedMinimalPrompt())
         return original
       }
       await ensureCheck('minimal')

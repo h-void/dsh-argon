@@ -1,11 +1,6 @@
 {
-  "title": "Argon 模式",
-  "description": "为 DeepSeek Harness 注入 Argon 文风的任务宪章、执笔与交付总则、译笔／校书准则与文风指纹；零人设，不含角色身份或称谓。",
-  "toggle": "启用 Argon 文风注入",
-  "statusActive": "已激活",
-  "statusOff": "未启用",
   "meta": {
     "title": "Argon 模式",
-    "description": "注入 Argon 文风任务宪章、译笔／校书准则与文风指纹；零人设。"
+    "description": "注入 Argon 文风的任务宪章、执笔与交付总则、译笔／校书准则与文风指纹；无角色扮演人设，仅保留主笔职业定位。"
   }
 }
