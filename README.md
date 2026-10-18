@@ -38,17 +38,105 @@ dsh-argon/
 
 ---
 
-## 🚀 安装与使用
+## 🚀 安装与更新
 
-本插件已作为本地依赖注册在 `~/.dsh/profiles/desktop/package.json` 的 `dependencies` 与 `bundles` 列表中，依赖指向 `file:D:/ASUS/Documents/dsh-argon`。
+### Web 端
 
-修改 `assets/` 下的任何文件后**无需重启**：`rules.js` 每次组装提示词都会重新读盘，热更新即时生效。
+适用于通过命令行运行 `dsh web` 的环境。
 
-若需同步到已安装目录（非软链环境），执行：
+#### 安装
+```sh
+# 安装指定版本
+dsh plugin --profile web add github:h-void/dsh-argon#v0.0.1
 
-```powershell
-Copy-Item -Path "D:\ASUS\Documents\dsh-argon\*" -Destination "C:\Users\ASUS\.dsh\profiles\desktop\node_modules\dsh-argon" -Recurse -Force
+# 或安装 master 最新代码
+dsh plugin --profile web add github:h-void/dsh-argon
 ```
+安装后重启 `dsh web`，在浏览器打开界面进行启用（详见下方「使用说明」）。
+
+#### 更新
+```sh
+dsh plugin --profile web remove dsh-argon
+dsh plugin --profile web add github:h-void/dsh-argon#目标版本号
+```
+更新后重启 `dsh web`。
+
+#### 卸载
+```sh
+dsh plugin --profile web remove dsh-argon
+```
+
+---
+
+### 桌面端（Desktop App）
+
+适用于 DeepSeek Harness 官方桌面客户端。
+
+> **注意**：桌面端使用独立的 `desktop` profile，不能使用全局 `dsh` 命令，必须调用桌面端自带的 CLI 工具执行配置。
+
+#### 1. 桌面端 CLI 路径
+以 Windows 为例，默认路径为：
+```text
+%LOCALAPPDATA%\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd
+```
+
+> 如果桌面版安装在别的目录，把路径换成实际的 `...\resources\runtime\cli\bin\dsh.cmd`；也可以直接使用已在 PATH 中的 `dsh` 命令。
+
+#### 2. 安装步骤
+1. 完全退出正在运行的桌面客户端。
+2. 打开 PowerShell 或 CMD，执行安装命令：
+   ```powershell
+   & "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add github:h-void/dsh-argon#v0.0.1
+   ```
+3. 启动桌面客户端，按下方说明启用插件与功能开关。
+
+#### 3. 更新步骤
+1. 完全退出桌面客户端。
+2. 执行重新安装命令：
+   ```powershell
+   & "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop remove dsh-argon
+   & "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add github:h-void/dsh-argon#目标版本号
+   ```
+3. 重新打开桌面客户端。
+
+#### 4. 卸载步骤
+```powershell
+& "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop remove dsh-argon
+```
+
+---
+
+### 本地源码安装
+
+面向二次开发调试，使用 `file:` 协议安装本地源码目录：
+
+```sh
+# Web 端
+dsh plugin --profile web add file:D:/ASUS/Documents/dsh-argon
+
+# 桌面端
+& "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add file:D:/ASUS/Documents/dsh-argon
+```
+
+本地源码安装后，插件运行时从安装目录读取 `assets/`；改 `node_modules/dsh-argon/assets/` 会热更新，改源码仓库的 `assets/` 后需重新执行 `dsh plugin --profile desktop install` 同步安装副本。`src/`、`lib/` 改动需要重启 DSH。
+
+---
+
+## 使用说明（双重开关确认）
+
+> **特别注意：必须同时确保两处开关均已打开，插件才会真正生效！**
+>
+> 1. **第一步（插件加载开关）**：进入左侧侧边栏的 **「插件」** 管理页面，在已安装插件列表中找到 `dsh-argon`（Argon 模式），**点击打开/启用该插件**。如果未在插件列表开启，DSH 运行时根本不会加载该插件代码。
+> 2. **第二步（Argon 功能开关）**：在 **「插件」** 管理页面点开 `dsh-argon` 进入详情配置页，在 **「Argon 模式」** 设置卡片中将顶部的 **「启用 Argon 文风注入」** 开关打开。
+>
+> 只有上述两个开关同时开启，Argon 规则才会实际注入到系统提示词流水线中。
+
+### 「Argon 模式」设置面板功能
+
+- **启用 Argon 文风注入**：一键切换注入状态，开启后下一次对话即刻生效。
+- **各模式状态**：实时查看 Standard、PTC、Cordis、Minimal 四个模式的注入状态。显示 `已生效` 即表示特征校验通过并成功注入；若显示异常，请首先检查「插件」管理页面中插件是否已被打开。
+- **提示词指纹**：展示当前注入规则的 SHA-256 哈希值（前 16 位），便于核对部署版本。
+- **查看提示词预览**：点击各模式下的「查看预览」，可实时查看即将发送给模型的**完整系统提示词正文、总行数与字节数**。
 
 ---
 
