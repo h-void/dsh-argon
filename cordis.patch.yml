@@ -1,0 +1,11 @@
+# 私有 RPC 需要 Connection 持有 webServer；启动参数由官方 webStartup 提供。
+- id: connection
+  name: '@deepseek-ai/dsh-client-connection'
+  inject: [webStartup, webServer]
+  config:
+    trustedHosts: !!js ctx.webStartup.trustedHosts
+
+# dsh-argon 提示词与技能注入插件
+- insert:
+    - id: argon
+      name: 'dsh-argon'

@@ -1,0 +1,47 @@
+{
+  "name": "dsh-argon",
+  "version": "0.0.1",
+  "engines": {
+    "dsh": ">=0.2.0-rc.2 <0.2.2-0"
+  },
+  "private": true,
+  "description": "Argon Persona Plugin for DeepSeek Harness: injects personality.md (the succubus chief-editor persona with four-state switching, Galgame/manga/novel translation and polishing rules) into standard, ptc, cordis, minimal, and subagent prompts",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/node.js",
+  "exports": {
+    ".": "./src/node.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "assets",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "locale"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Argon 模式",
+  "description": "为 DeepSeek Harness 注入专属贴身魅魔主笔 & 秘阁掌事女官人设，含四态切换、译笔准则与校书准则。",
+  "toggle": "启用 Argon 人设注入",
+  "statusActive": "已激活",
+  "statusOff": "未启用",
+  "meta": {
+    "title": "Argon 模式",
+    "description": "注入专属贴身魅魔主笔人设、四态切换与 Galgame／漫画／小说译校准则。"
+  }
+}
