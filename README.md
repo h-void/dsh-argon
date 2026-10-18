@@ -34,7 +34,7 @@ dsh-argon/
 └── assets/                    # Argon 提示词资产
     ├── system.md              # 任务宪章准则（含 {{agent_personality}} 槽位）
     └── personality.md         # 执笔与交付总则（译笔 + 校书 + 文风指纹 + 交付纪律）
-    ```
+```
 
 ---
 
